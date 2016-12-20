@@ -39,6 +39,22 @@ sudo mongod --shutdown --dbpath $MONGODB_DIR
 echo "MongoDB stopped (`date`)"
 }
 
+# Start SDCC services
+function start_sdcc()
+{
+echo "Starting SDCC services (`date`)"
+sudo systemctl start httpd
+echo "SDCC services started (`date`)"
+}
+
+# Stop SDCC services
+function stop_sdcc()
+{
+echo "Stopping SDCC services (`date`)"
+sudo systemctl stop httpd
+echo "SDCC services stopped (`date`)"
+}
+
 #
 # Check MongoDB running and the running role on the both Local and Remote servers
 #
@@ -55,21 +71,34 @@ echo "Remote: $remote_role"
 #
 # Manage incorrect role cases 
 #
-if [ "$local_role" == "$remote_role" ]; then
+#if [ "$local_role" == "$remote_role" ]; then
+#
+## Send alert, the same role on the both MongoDB servers 
+#
+#  if [ "$local_role" == "$LOCAL_ROLE" ]; then
+#    echo "Local role is correct, do nothing: active ($local_role), defined ($LOCAL_ROLE)"
+#  else
+#    echo "Local role is incorrect, restart MongoDB: active ($local_role), defined ($LOCAL_ROLE)"
+#    stop_mongo
+#    start_mongo
+#  fi
+#elif [ "$local_role" == "failure" ]; then
+#echo "Local MongoDB is not running, start it"
+#start_mongo
+#fi
 
-# Send alert, the same role on the both MongoDB servers 
+#
+# Manage SDCC service
+#
 
-  if [ "$local_role" == "$LOCAL_ROLE" ]; then
-    echo "Local role is correct, do nothing: active ($local_role), defined ($LOCAL_ROLE)"
-  else
-    echo "Local role is incorrect, restart MongoDB: active ($local_role), defined ($LOCAL_ROLE)"
-    stop_mongo
-    start_mongo
-  fi
-elif [ "$local_role" == "failure" ]; then
-echo "Local MongoDB is not running, start it"
-start_mongo
+if [ "$local_role" != "master" ] && [ "$remote_role" == "master" ]; then
+echo "Local: $local_role, stopping SDCC services"
+stop_sdcc
+elif [ "$local_role" == "master" ] && [ "$remote_role" != "master" ]; then
+echo "Local: $local_role, starting SDCC services"
+start_sdcc
 fi
+
 
 echo "=============== (`date`) Finish script ==============="
 echo ""
