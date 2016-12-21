@@ -32,6 +32,10 @@ echo "MongoDB stopped (`date`)"
 # Start SDCC services
 function start_sdcc()
 {
+status=`systemctl status httpd | awk '/Active/{print $2}'`
+if [ status == "active" ]; then
+    return
+fi
 echo "Starting SDCC services (`date`)"
 sudo systemctl start httpd
 echo "SDCC services started (`date`)"
@@ -40,6 +44,10 @@ echo "SDCC services started (`date`)"
 # Stop SDCC services
 function stop_sdcc()
 {
+status=`systemctl status httpd | awk '/Active/{print $2}'`
+if [ status != "active" ]; then
+    return
+fi
 echo "Stopping SDCC services (`date`)"
 sudo systemctl stop httpd
 echo "SDCC services stopped (`date`)"
@@ -56,10 +64,10 @@ echo "Local: $local_role"
 
 # Remote role of MongoDB
 remote_role1=`echo "$mongo_res" | awk -v host=${REMOTE_HOST1} '{if($1 && index($1,host))print $2}'`
-echo "Remote 1: $remote_role1"
+echo "Remote (${REMOTE_HOST1}): $remote_role1"
 
 remote_role2=`echo "$mongo_res" | awk -v host=${REMOTE_HOST2} '{if($1 && index($1,host))print $2}'`
-echo "Remote 2: $remote_role2"
+echo "Remote (${REMOTE_HOST2}): $remote_role2"
 
 #
 # Manage SDCC service
