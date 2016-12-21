@@ -69,7 +69,7 @@ remote_role1=`echo "$mongo_res" | awk -v host=${REMOTE_HOST1} '{if($1 && index($
 echo "Remote MongoDB (${REMOTE_HOST1}): $remote_role1"
 
 remote_role2=`echo "$mongo_res" | awk -v host=${REMOTE_HOST2} '{if($1 && index($1,host))print $2}'`
-echo "Remote MOngoDB (${REMOTE_HOST2}): $remote_role2"
+echo "Remote MongoDB (${REMOTE_HOST2}): $remote_role2"
 
 #
 # Manage SDCC service
