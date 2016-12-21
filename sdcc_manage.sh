@@ -33,7 +33,7 @@ echo "MongoDB stopped (`date`)"
 function start_sdcc()
 {
 status=`systemctl status httpd | awk '/Active/{print $2}'`
-if [ status == "active" ]; then
+if [ "${status}" == "active" ]; then
     return
 fi
 echo "Starting SDCC services (`date`)"
@@ -45,7 +45,7 @@ echo "SDCC services started (`date`)"
 function stop_sdcc()
 {
 status=`systemctl status httpd | awk '/Active/{print $2}'`
-if [ status != "active" ]; then
+if [ "${status}" != "active" ]; then
     return
 fi
 echo "Stopping SDCC services (`date`)"
