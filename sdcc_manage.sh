@@ -83,7 +83,6 @@ elif [ "$local_role" == "master" ]; then
 start_sdcc
 fi
 
-
 echo "=============== (`date`) Finish script ==============="
 echo ""
 echo ""
