@@ -62,20 +62,18 @@ mongo_res=`fab --hide=running,warning,aborts,stderr,status -H ${LOCAL_HOST},${RE
 
 # Local role of MongoDB
 local_role=`echo "$mongo_res" | awk -v host=${LOCAL_HOST} '{if($1 && index($1,host))print $2}'`
-echo "Local: $local_role"
+echo "Local MongoDB (${LOCAL_HOST}): $local_role"
 
 # Remote role of MongoDB
 remote_role1=`echo "$mongo_res" | awk -v host=${REMOTE_HOST1} '{if($1 && index($1,host))print $2}'`
-echo "Remote (${REMOTE_HOST1}): $remote_role1"
+echo "Remote MongoDB (${REMOTE_HOST1}): $remote_role1"
 
 remote_role2=`echo "$mongo_res" | awk -v host=${REMOTE_HOST2} '{if($1 && index($1,host))print $2}'`
-echo "Remote (${REMOTE_HOST2}): $remote_role2"
+echo "Remote MOngoDB (${REMOTE_HOST2}): $remote_role2"
 
 #
 # Manage SDCC service
 #
-
-echo "Local MongoDB role: $local_role"
 
 if [ "$local_role" != "master" ]; then
 stop_sdcc
