@@ -33,6 +33,7 @@ echo "MongoDB stopped (`date`)"
 function start_sdcc()
 {
 status=`systemctl status httpd | awk '/Active/{print $2}'`
+echo "Local status: ${status}"
 if [ "${status}" == "active" ]; then
     return
 fi
@@ -45,6 +46,7 @@ echo "SDCC services started (`date`)"
 function stop_sdcc()
 {
 status=`systemctl status httpd | awk '/Active/{print $2}'`
+echo "Local status: ${status}"
 if [ "${status}" != "active" ]; then
     return
 fi
@@ -74,10 +76,10 @@ echo "Remote (${REMOTE_HOST2}): $remote_role2"
 #
 
 if [ "$local_role" != "master" ]; then
-echo "Local: $local_role, stopping SDCC services"
+echo "Local role: $local_role"
 stop_sdcc
 elif [ "$local_role" == "master" ]; then
-echo "Local: $local_role, starting SDCC services"
+echo "Local role: $local_role"
 start_sdcc
 fi
 
